@@ -1,6 +1,7 @@
 package com.example.desafioSpring.services;
 
 import com.example.desafioSpring.dtos.FollowersDTO;
+import com.example.desafioSpring.dtos.FollowingDTO;
 import com.example.desafioSpring.dtos.UserQtyFollowersDTO;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.repositories.UserRepository;
@@ -48,4 +49,10 @@ public class UserService {
         User user = new User(userName);
         return userRepository.save(user);
     }
+
+    public FollowingDTO listFollowing(Long userId){
+        User user = userRepository.findById(userId).orElse(null);
+        return new FollowingDTO(user);
+    }
+
 }

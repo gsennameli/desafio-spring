@@ -41,4 +41,9 @@ public class UserController {
         return new ResponseEntity(userService.createUser(userName),HttpStatus.OK);
     }
 
+    @GetMapping("/{userID}/followed/list")
+    public ResponseEntity getAllFollowed(@PathVariable Long userID){
+        return new ResponseEntity(userService.listFollowing(userID),HttpStatus.OK);
+    }
+
 }

@@ -2,12 +2,16 @@ package com.example.desafioSpring.services;
 
 import com.example.desafioSpring.dtos.FollowersDTO;
 import com.example.desafioSpring.dtos.FollowingDTO;
+import com.example.desafioSpring.dtos.UserDTO;
 import com.example.desafioSpring.dtos.UserQtyFollowersDTO;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -31,8 +35,15 @@ public class UserService {
                 }).orElse(new ResponseEntity(HttpStatus.BAD_REQUEST));
     }
 
-    public Iterable<User> findAllUsers(){
-        return userRepository.findAll();
+
+    public List<UserDTO> findAllUsers(){
+        List<User> usersList = userRepository.findAll();
+        List<UserDTO> usersDtoList = new ArrayList<>();
+
+        for(User user : usersList){
+            usersDtoList.add(new UserDTO(user.getId(),user.getName()));
+        }
+        return usersDtoList;
     }
 
     public UserQtyFollowersDTO qtyFollowers(Long userId){

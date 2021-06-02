@@ -13,7 +13,7 @@ public class FollowersDTO {
     public FollowersDTO(User user) {
         this.userId = user.getId();
         this.userName = user.getName();
-        this.followers = addFollowersDTO(user.getFollowers());
+        this.followers = addFollowersDTO(user.getFollowersList());
     }
     public Set<UserDTO> addFollowersDTO(Set<User> listFollowers){
         for(User user : listFollowers){

@@ -1,42 +1,51 @@
 package com.example.desafioSpring.models;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name="usuario")
+@Entity
 public class User {
-
+//TODO O usuário que nao eh vendedor nao pode ser seguido, assim ele n tem followers
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    @ManyToMany
-    private Set<User> followers;
-    @ManyToMany
-    private Set<User> following;
+    private boolean isSeller = true;
 
-    public void followUser(User user){
-        following.add(user);
-        user.getFollowers().add(this);
+    @ManyToMany
+    private Set<User> followersList;
+
+    @ManyToMany
+    private Set<User> followingList;
+
+    public void followUser(User userToFollow){
+        followingList.add(userToFollow);
+        userToFollow.getFollowersList().add(this);
     }
 
     public int qtyFollowers(){
-        int qtyFollowers = 0;
-        for(User user : followers){
-            qtyFollowers++;
-        }
-        return qtyFollowers;
+        return followersList.size();
     }
 
     public User(String name) {
         this.name = name;
-        this.followers = new HashSet<>();
-        this.following = new HashSet<>();
+        this.followersList = new HashSet<>();
+        this.followingList = new HashSet<>();
     }
 
     public User() {
+    }
+
+    public boolean isSeller() {
+        return isSeller;
+    }
+
+    public void setSeller(boolean seller) {
+        isSeller = seller;
     }
 
     public Long getId() {
@@ -55,19 +64,19 @@ public class User {
         this.name = name;
     }
 
-    public Set<User> getFollowers() {
-        return followers;
+    public Set<User> getFollowersList() {
+        return followersList;
     }
 
-    public void setFollowers(Set<User> followers) {
-        this.followers = followers;
+    public void setFollowersList(Set<User> followersList) {
+        this.followersList = followersList;
     }
 
-    public Set<User> getFollowing() {
-        return following;
+    public Set<User> getFollowingList() {
+        return followingList;
     }
 
-    public void setFollowing(Set<User> following) {
-        this.following = following;
+    public void setFollowingList(Set<User> followingList) {
+        this.followingList = followingList;
     }
 }

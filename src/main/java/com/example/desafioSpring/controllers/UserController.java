@@ -1,10 +1,13 @@
 package com.example.desafioSpring.controllers;
 
+import com.example.desafioSpring.dtos.UserDTO;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -16,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public Iterable<User> getAllUsers(){
+    public List<UserDTO> getAllUsers(){
         return userService.findAllUsers();
     }
 

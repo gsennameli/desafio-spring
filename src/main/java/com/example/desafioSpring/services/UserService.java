@@ -70,6 +70,19 @@ public class UserService {
         return new FollowingDTO(user);
     }
 
+    public ResponseEntity unfollowUser(int userId,int userToUnfollowId){
+        User user = userRepository.findById(userId).orElse(null);
+        User userToUnfollow = userRepository.findById(userToUnfollowId).orElse(null);
+        if(userToUnfollow == null || userId == userToUnfollowId)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        user.unfollowUser(userToUnfollow);
+        userRepository.save(user);
+        userRepository.save(userToUnfollow);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 
 
 }

@@ -18,10 +18,10 @@ public class User{
     private String name;
     private boolean isSeller = true;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<User> followersList;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<User> followingList;
 
     @OneToMany(mappedBy = "user")
@@ -30,6 +30,11 @@ public class User{
     public void followUser(User userToFollow){
         followingList.add(userToFollow);
         userToFollow.getFollowersList().add(this);
+    }
+
+    public void unfollowUser(User userToUnfollow){
+        followingList.remove(userToUnfollow);
+        userToUnfollow.getFollowersList().remove(this);
     }
 
     public int qtyFollowers(){

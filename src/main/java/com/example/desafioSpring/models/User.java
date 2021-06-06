@@ -3,7 +3,9 @@ package com.example.desafioSpring.models;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -11,7 +13,7 @@ public class User {
 //TODO O usuário que nao eh vendedor nao pode ser seguido, assim ele n tem followers
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String name;
     private boolean isSeller = true;
@@ -21,6 +23,9 @@ public class User {
 
     @ManyToMany
     private Set<User> followingList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> post;
 
     public void followUser(User userToFollow){
         followingList.add(userToFollow);
@@ -35,6 +40,8 @@ public class User {
         this.name = name;
         this.followersList = new HashSet<>();
         this.followingList = new HashSet<>();
+        if(isSeller)
+            this.post = new ArrayList<>();
     }
 
     public User() {
@@ -48,11 +55,11 @@ public class User {
         isSeller = seller;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -78,5 +85,13 @@ public class User {
 
     public void setFollowingList(Set<User> followingList) {
         this.followingList = followingList;
+    }
+
+    public List<Post> getPost() {
+        return post;
+    }
+
+    public void setPost(List<Post> post) {
+        this.post = post;
     }
 }

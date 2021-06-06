@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FollowersDTO {
-    private Long userId;
+    private int userId;
     private String userName;
     private Set<UserDTO> followers = new HashSet<>();
 
@@ -22,11 +22,11 @@ public class FollowersDTO {
         return followers;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

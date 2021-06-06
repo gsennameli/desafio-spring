@@ -23,19 +23,24 @@ public class UserController {
         return userService.findAllUsers();
     }
 
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable int userId){
+        return userService.findUserById(userId);
+    }
+
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public ResponseEntity followUser(@PathVariable Long userId, @PathVariable Long userIdToFollow){
+    public ResponseEntity followUser(@PathVariable int userId, @PathVariable int userIdToFollow){
         //TODO Talvez mostrar mensagem quando um usuario tentar seguir um usuario que ele ja segue ou quando tenta seguir a si mesmo
         return userService.followUser(userId,userIdToFollow);
     }
 
     @GetMapping("/{userId}/followers/count")
-    public ResponseEntity getQtyFollowers(@PathVariable Long userId){
+    public ResponseEntity getQtyFollowers(@PathVariable int userId){
         return new ResponseEntity(userService.qtyFollowers(userId),HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity getAllFollowers(@PathVariable Long userId){
+    public ResponseEntity getAllFollowers(@PathVariable int userId){
         return new ResponseEntity(userService.listFollowers(userId),HttpStatus.OK);
     }
 
@@ -45,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/{userID}/followed/list")
-    public ResponseEntity getAllFollowed(@PathVariable Long userID){
+    public ResponseEntity getAllFollowed(@PathVariable int userID){
         return new ResponseEntity(userService.listFollowing(userID),HttpStatus.OK);
     }
 

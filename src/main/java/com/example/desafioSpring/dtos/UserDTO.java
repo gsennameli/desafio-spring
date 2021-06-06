@@ -1,19 +1,19 @@
 package com.example.desafioSpring.dtos;
 
 public class UserDTO {
-    private Long userId;
+    private int userId;
     private String userName;
 
-    public UserDTO(Long userId, String userName) {
+    public UserDTO(int userId, String userName) {
         this.userId = userId;
         this.userName = userName;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

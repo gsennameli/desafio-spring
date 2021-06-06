@@ -3,7 +3,7 @@ package com.example.desafioSpring.dtos;
 import com.example.desafioSpring.models.User;
 
 public class UserQtyFollowersDTO {
-    private Long userId;
+    private int userId;
     private String userName;
     private int followers_count;
 
@@ -13,11 +13,11 @@ public class UserQtyFollowersDTO {
         this.followers_count = user.qtyFollowers();
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

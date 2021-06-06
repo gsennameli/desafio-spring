@@ -21,7 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity followUser(Long userId, Long userIdToFollow){
+    public ResponseEntity followUser(int userId, int userIdToFollow){
         User userToFollow = userRepository.findById(userIdToFollow).orElse(null);
         if(userToFollow == null || userId == userIdToFollow)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -46,12 +46,16 @@ public class UserService {
         return usersDtoList;
     }
 
-    public UserQtyFollowersDTO qtyFollowers(Long userId){
+    public User findUserById(int userId){
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    public UserQtyFollowersDTO qtyFollowers(int userId){
         User user = userRepository.findById(userId).orElse(null);
         return new UserQtyFollowersDTO(user);
     }
 
-    public FollowersDTO listFollowers(Long userId){
+    public FollowersDTO listFollowers(int userId){
         User user = userRepository.findById(userId).orElse(null);
         return new FollowersDTO(user);
     }
@@ -61,7 +65,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public FollowingDTO listFollowing(Long userId){
+    public FollowingDTO listFollowing(int userId){
         User user = userRepository.findById(userId).orElse(null);
         return new FollowingDTO(user);
     }

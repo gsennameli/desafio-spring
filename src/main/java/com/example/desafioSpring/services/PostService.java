@@ -3,6 +3,7 @@ package com.example.desafioSpring.services;
 import com.example.desafioSpring.dtos.ErrorHandlingDTO;
 import com.example.desafioSpring.dtos.PostRequest;
 import com.example.desafioSpring.dtos.PostResponse;
+import com.example.desafioSpring.dtos.RecentPostsResponse;
 import com.example.desafioSpring.models.Post;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.repositories.PostRepository;
@@ -11,6 +12,10 @@ import com.example.desafioSpring.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class PostService {
@@ -28,12 +33,28 @@ public class PostService {
         //TODO Post nao esta atrelando a um usuario
         if(productRepository.findById(postRequest.getDetail().getId()).isPresent())
             return new ResponseEntity(new ErrorHandlingDTO("This product Id already exists"),HttpStatus.BAD_REQUEST);
+
         User user = userRepository.findById(postRequest.getUser_id()).orElse(null);
         if(user == null)
             return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.NOT_FOUND);
+
         Post post = new Post(postRequest.getId(),postRequest.getDate(),postRequest.getCategory(),postRequest.getPrice(),postRequest.getDetail(),user);
         postRepository.save(post);
+
         PostResponse postResponse = new PostResponse(post);
         return new ResponseEntity(postResponse,HttpStatus.OK);
+    }
+
+    public ResponseEntity getMostRecentPosts(int userId){
+        User user = userRepository.findById(userId).orElse(null);
+        List<Post> postsList = new ArrayList<>();
+
+        for(User elem : user.getFollowingList()){
+            postsList.addAll(elem.getPost());
+        }
+        postsList.sort(Comparator.comparing(Post::getDate));
+
+        RecentPostsResponse recentPostsResponse = new RecentPostsResponse(userId,postsList);
+        return new ResponseEntity(recentPostsResponse,HttpStatus.OK);
     }
 }

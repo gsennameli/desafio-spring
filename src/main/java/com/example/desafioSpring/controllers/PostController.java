@@ -5,10 +5,7 @@ import com.example.desafioSpring.models.Post;
 import com.example.desafioSpring.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
@@ -22,5 +19,10 @@ public class PostController {
     @PostMapping("/newpost")
     public ResponseEntity newPost(@RequestBody PostRequest post){
         return postService.createPost(post);
+    }
+
+    @GetMapping("/followed/{userId}/list")
+    public ResponseEntity listPost(@PathVariable int userId){
+        return postService.getMostRecentPosts(userId);
     }
 }

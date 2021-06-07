@@ -3,6 +3,7 @@ package com.example.desafioSpring.dtos;
 import com.example.desafioSpring.models.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class PromoPostRequest {
@@ -10,7 +11,7 @@ public class PromoPostRequest {
     private int id;
 
     @JsonFormat(pattern="dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
     private int category;
     private double price;
     private boolean hasPromo;
@@ -34,11 +35,11 @@ public class PromoPostRequest {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

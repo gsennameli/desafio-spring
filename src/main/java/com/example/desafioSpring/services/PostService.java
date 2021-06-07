@@ -10,9 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -48,19 +51,26 @@ public class PostService {
         User user = userRepository.findById(userId).orElse(null);
         List<Post> postsList = new ArrayList<>();
 
+        //Add Posts of all users
         for(User elem : user.getFollowingList()){
             postsList.addAll(elem.getPost());
         }
+
+        //Filtering to get posts up to two weeks ago
+        List<Post> lastTwoWeeksPosts = postsList.stream()
+                                                .filter(post -> LocalDate.now().minusWeeks(2).compareTo(post.getDate())<0)
+                                                .collect(Collectors.toList());
+
         if(order == null)
-            return new ResponseEntity(new RecentPostsResponse(userId,postsList),HttpStatus.OK);
+            return new ResponseEntity(new RecentPostsResponse(userId,lastTwoWeeksPosts),HttpStatus.OK);
         if(order.equals("date_asc"))
-            postsList.sort(Comparator.comparing(Post::getDate));
+            lastTwoWeeksPosts.sort(Comparator.comparing(Post::getDate));
         else if (order.equals("date_desc"))
-            postsList.sort(Comparator.comparing(Post::getDate).reversed());
+            lastTwoWeeksPosts.sort(Comparator.comparing(Post::getDate).reversed());
         else
             return new ResponseEntity(new ErrorHandlingDTO("Invalid Param"),HttpStatus.BAD_REQUEST);
 
-        RecentPostsResponse recentPostsResponse = new RecentPostsResponse(userId,postsList);
+        RecentPostsResponse recentPostsResponse = new RecentPostsResponse(userId,lastTwoWeeksPosts);
         return new ResponseEntity(recentPostsResponse,HttpStatus.OK);
     }
 

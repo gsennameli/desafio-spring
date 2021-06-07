@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,7 @@ public class Post {
     private int id;
 
     @JsonFormat(pattern="dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
     private int category;
     private double price;
     private boolean hasPromo = false;
@@ -31,7 +32,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(int id, Date date, int category, double price,Product detail, User user) {
+    public Post(int id, LocalDate date, int category, double price,Product detail, User user) {
         this.id = id;
         this.date = date;
         this.category = category;
@@ -64,11 +65,11 @@ public class Post {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

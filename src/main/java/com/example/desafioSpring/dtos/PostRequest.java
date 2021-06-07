@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class PostRequest {
@@ -15,7 +16,7 @@ public class PostRequest {
     private int id;
 
     @JsonFormat(pattern="dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
     private int category;
     private double price;
 
@@ -37,11 +38,11 @@ public class PostRequest {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

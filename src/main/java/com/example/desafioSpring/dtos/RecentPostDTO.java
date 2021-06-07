@@ -4,13 +4,14 @@ import com.example.desafioSpring.models.Post;
 import com.example.desafioSpring.models.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class RecentPostDTO {
     private int id;
 
     @JsonFormat(pattern="dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
 
     private int category;
     private double price;
@@ -46,11 +47,11 @@ public class RecentPostDTO {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

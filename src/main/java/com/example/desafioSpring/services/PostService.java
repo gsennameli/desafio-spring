@@ -84,4 +84,20 @@ public class PostService {
         PostResponse postResponse = new PostResponse(post);
         return new ResponseEntity(postResponse,HttpStatus.OK);
     }
+
+    public ResponseEntity getQuantityOfPromoPosts(int userId){
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null)
+            return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.NOT_FOUND);
+        else if (user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("This user is not a seller"),HttpStatus.BAD_REQUEST);
+
+        int countPromoPosts = 0;
+        for(Post post : user.getPost()){
+            if(post.isHasPromo())
+                countPromoPosts++;
+        }
+
+        return new ResponseEntity(new QuantityPromoPostsResponse(user,countPromoPosts),HttpStatus.OK);
+    }
 }

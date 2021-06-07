@@ -30,4 +30,8 @@ public class PostController {
     public ResponseEntity createPromoPost(@RequestBody PromoPostRequest promoPostRequest){
         return postService.createPromoPost(promoPostRequest);
     }
+    @GetMapping("/{userId}/countPromo")
+    public ResponseEntity getCountPromoPosts(@PathVariable int userId){
+        return postService.getQuantityOfPromoPosts(userId);
+    }
 }

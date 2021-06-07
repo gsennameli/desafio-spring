@@ -23,7 +23,8 @@ public class UserService {
         User userToFollow = userRepository.findById(userIdToFollow).orElse(null);
         if(userToFollow == null || userId == userIdToFollow)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-
+        if(userToFollow.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("You can only follow sellers"),HttpStatus.BAD_REQUEST);
         return userRepository.findById(userId)
                 .map(user -> {
                     user.followUser(userToFollow);
@@ -48,14 +49,19 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public UserQtyFollowersDTO qtyFollowers(int userId){
+    public ResponseEntity qtyFollowers(int userId){
         User user = userRepository.findById(userId).orElse(null);
-        return new UserQtyFollowersDTO(user);
+        if(user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("Common users do not have followers"),HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity(new UserQtyFollowersDTO(user),HttpStatus.OK);
     }
 
     public ResponseEntity listFollowers(int userId,String order){
         User user = userRepository.findById(userId).orElse(null);
         FollowersDTO followersDTO = new FollowersDTO(user);
+        if(user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("Common users do not have followers"),HttpStatus.BAD_REQUEST);
         if(order == null)
             return new ResponseEntity(followersDTO,HttpStatus.OK);
         if(order.equals("name_asc"))
@@ -68,8 +74,8 @@ public class UserService {
         return new ResponseEntity(followersDTO,HttpStatus.OK);
     }
 
-    public User createUser(String userName){
-        User user = new User(userName);
+    public User createUser(CreateUserRequest createUserRequest){
+        User user = new User(createUserRequest.getName(), createUserRequest.isSeller());
         return userRepository.save(user);
     }
 

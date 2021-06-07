@@ -16,7 +16,7 @@ public class User{
     private int id;
 
     private String name;
-    private boolean isSeller = true;
+    private boolean isSeller;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<User> followersList;
@@ -45,7 +45,15 @@ public class User{
         this.name = name;
         this.followersList = new HashSet<>();
         this.followingList = new HashSet<>();
-        if(isSeller)
+        if(this.isSeller)
+            this.post = new ArrayList<>();
+    }
+    public User(String name,boolean isSeller) {
+        this.name = name;
+        this.followersList = new HashSet<>();
+        this.followingList = new HashSet<>();
+        this.isSeller = isSeller;
+        if(this.isSeller)
             this.post = new ArrayList<>();
     }
 

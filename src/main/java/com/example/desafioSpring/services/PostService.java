@@ -34,6 +34,8 @@ public class PostService {
         User user = userRepository.findById(postRequest.getUser_id()).orElse(null);
         if(user == null)
             return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.NOT_FOUND);
+        else if (user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("You can not assign a post to a not seller user"),HttpStatus.BAD_REQUEST);
 
         Post post = new Post(postRequest.getId(),postRequest.getDate(),postRequest.getCategory(),postRequest.getPrice(),postRequest.getDetail(),user);
         postRepository.save(post);

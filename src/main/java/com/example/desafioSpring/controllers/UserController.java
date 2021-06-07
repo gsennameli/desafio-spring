@@ -1,5 +1,6 @@
 package com.example.desafioSpring.controllers;
 
+import com.example.desafioSpring.dtos.CreateUserRequest;
 import com.example.desafioSpring.dtos.UserDTO;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.services.UserService;
@@ -36,7 +37,7 @@ public class UserController {
 
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity getQtyFollowers(@PathVariable int userId){
-        return new ResponseEntity(userService.qtyFollowers(userId),HttpStatus.OK);
+        return userService.qtyFollowers(userId);
     }
 
     @GetMapping("/{userId}/followers/list")
@@ -45,9 +46,9 @@ public class UserController {
         return userService.listFollowers(userId,order);
     }
 
-    @PostMapping("/create/{userName}")
-    public ResponseEntity createUser(@PathVariable String userName){
-        return new ResponseEntity(userService.createUser(userName),HttpStatus.OK);
+    @PostMapping("/create")
+    public ResponseEntity createUser(@RequestBody CreateUserRequest createUserRequest){
+        return new ResponseEntity(userService.createUser(createUserRequest),HttpStatus.OK);
     }
 
     @GetMapping("/{userID}/followed/list")

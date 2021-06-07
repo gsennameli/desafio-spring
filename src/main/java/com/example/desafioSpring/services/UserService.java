@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+    //TODO Qty Followers nao esta chechando se o usuario existe
     private final UserRepository userRepository;
 
     UserService(UserRepository userRepository){
@@ -45,8 +46,13 @@ public class UserService {
         return usersDtoList;
     }
 
-    public User findUserById(int userId){
-        return userRepository.findById(userId).orElse(null);
+    public ResponseEntity findUserById(int userId){
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.BAD_REQUEST);
+
+        UserDTO userDTO = new UserDTO(user.getId(),user.getName());
+        return new ResponseEntity(userDTO,HttpStatus.OK);
     }
 
     public ResponseEntity qtyFollowers(int userId){

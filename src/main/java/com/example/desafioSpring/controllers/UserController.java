@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable int userId){
+    public ResponseEntity getUserById(@PathVariable int userId){
         return userService.findUserById(userId);
     }
 
@@ -42,7 +42,6 @@ public class UserController {
 
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity getAllFollowers(@PathVariable int userId,@RequestParam(name = "order", required = false) String order){
-        //return new ResponseEntity(userService.listFollowers(userId),HttpStatus.OK);
         return userService.listFollowers(userId,order);
     }
 

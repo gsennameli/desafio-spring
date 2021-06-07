@@ -33,6 +33,8 @@ public class PostService {
 
         if(productRepository.findById(postRequest.getDetail().getId()).isPresent())
             return new ResponseEntity(new ErrorHandlingDTO("This product Id already exists"),HttpStatus.BAD_REQUEST);
+        else if(productRepository.findById(postRequest.getId()).isPresent())
+            return new ResponseEntity(new ErrorHandlingDTO("This post Id already exists"),HttpStatus.BAD_REQUEST);
 
         User user = userRepository.findById(postRequest.getUser_id()).orElse(null);
         if(user == null)
@@ -77,6 +79,8 @@ public class PostService {
     public ResponseEntity createPromoPost(PromoPostRequest promoPostRequest){
         if(productRepository.findById(promoPostRequest.getDetail().getId()).isPresent())
             return new ResponseEntity(new ErrorHandlingDTO("This product Id already exists"),HttpStatus.BAD_REQUEST);
+        else if (postRepository.findById(promoPostRequest.getId()).isPresent())
+            return new ResponseEntity(new ErrorHandlingDTO("This post Id already exists"),HttpStatus.BAD_REQUEST);
 
         User user = userRepository.findById(promoPostRequest.getUser_id()).orElse(null);
         if(user == null)

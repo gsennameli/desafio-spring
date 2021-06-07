@@ -2,20 +2,23 @@ package com.example.desafioSpring.dtos;
 
 import com.example.desafioSpring.models.User;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FollowersDTO {
     private int userId;
     private String userName;
-    private Set<UserDTO> followers = new HashSet<>();
+    private List<UserDTO> followers = new ArrayList<>();
 
     public FollowersDTO(User user) {
         this.userId = user.getId();
         this.userName = user.getName();
         this.followers = addFollowersDTO(user.getFollowersList());
     }
-    public Set<UserDTO> addFollowersDTO(Set<User> listFollowers){
+
+    public List<UserDTO> addFollowersDTO(Set<User> listFollowers){
         for(User user : listFollowers){
             followers.add(new UserDTO(user.getId(), user.getName()));
         }
@@ -38,11 +41,11 @@ public class FollowersDTO {
         this.userName = userName;
     }
 
-    public Set<UserDTO> getFollowers() {
+    public List<UserDTO> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(Set<UserDTO> followers) {
+    public void setFollowers(List<UserDTO> followers) {
         this.followers = followers;
     }
 }

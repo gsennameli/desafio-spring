@@ -1,9 +1,6 @@
 package com.example.desafioSpring.services;
 
-import com.example.desafioSpring.dtos.FollowersDTO;
-import com.example.desafioSpring.dtos.FollowingDTO;
-import com.example.desafioSpring.dtos.UserDTO;
-import com.example.desafioSpring.dtos.UserQtyFollowersDTO;
+import com.example.desafioSpring.dtos.*;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -11,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -55,9 +53,19 @@ public class UserService {
         return new UserQtyFollowersDTO(user);
     }
 
-    public FollowersDTO listFollowers(int userId){
+    public ResponseEntity listFollowers(int userId,String order){
         User user = userRepository.findById(userId).orElse(null);
-        return new FollowersDTO(user);
+        FollowersDTO followersDTO = new FollowersDTO(user);
+        if(order == null)
+            return new ResponseEntity(followersDTO,HttpStatus.OK);
+        if(order.equals("name_asc"))
+            followersDTO.getFollowers().sort(Comparator.comparing(UserDTO::getUserName));
+        else if (order.equals("name_desc"))
+            followersDTO.getFollowers().sort(Comparator.comparing(UserDTO::getUserName).reversed());
+        else
+            return new ResponseEntity(new ErrorHandlingDTO("Invalid Param"),HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity(followersDTO,HttpStatus.OK);
     }
 
     public User createUser(String userName){
@@ -65,9 +73,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public FollowingDTO listFollowing(int userId){
+    public ResponseEntity listFollowing(int userId,String order){
         User user = userRepository.findById(userId).orElse(null);
-        return new FollowingDTO(user);
+        FollowingDTO followingDTO = new FollowingDTO(user);
+        if(order == null)
+            return new ResponseEntity(followingDTO,HttpStatus.OK);
+        if(order.equals("name_asc"))
+            followingDTO.getFollowing().sort(Comparator.comparing(UserDTO::getUserName));
+        else if (order.equals("name_desc"))
+            followingDTO.getFollowing().sort(Comparator.comparing(UserDTO::getUserName).reversed());
+        else
+            return new ResponseEntity(new ErrorHandlingDTO("Invalid Param"),HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity(followingDTO,HttpStatus.OK);
     }
 
     public ResponseEntity unfollowUser(int userId,int userToUnfollowId){
@@ -81,8 +99,6 @@ public class UserService {
         userRepository.save(userToUnfollow);
         return new ResponseEntity(HttpStatus.OK);
     }
-
-
 
 
 }

@@ -40,8 +40,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity getAllFollowers(@PathVariable int userId){
-        return new ResponseEntity(userService.listFollowers(userId),HttpStatus.OK);
+    public ResponseEntity getAllFollowers(@PathVariable int userId,@RequestParam(name = "order", required = false) String order){
+        //return new ResponseEntity(userService.listFollowers(userId),HttpStatus.OK);
+        return userService.listFollowers(userId,order);
     }
 
     @PostMapping("/create/{userName}")
@@ -50,8 +51,8 @@ public class UserController {
     }
 
     @GetMapping("/{userID}/followed/list")
-    public ResponseEntity getAllFollowed(@PathVariable int userID){
-        return new ResponseEntity(userService.listFollowing(userID),HttpStatus.OK);
+    public ResponseEntity getAllFollowed(@PathVariable int userID,@RequestParam(name = "order", required = false) String order){
+        return userService.listFollowing(userID,order);
     }
 
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")

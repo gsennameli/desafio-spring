@@ -22,7 +22,7 @@ public class PostController {
     }
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity listPost(@PathVariable int userId){
-        return postService.getMostRecentPosts(userId);
+    public ResponseEntity listPosts(@PathVariable int userId,@RequestParam(name = "order", required = false) String order){
+        return postService.listPosts(userId,order);
     }
 }

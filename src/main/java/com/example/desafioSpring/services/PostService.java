@@ -1,9 +1,6 @@
 package com.example.desafioSpring.services;
 
-import com.example.desafioSpring.dtos.ErrorHandlingDTO;
-import com.example.desafioSpring.dtos.PostRequest;
-import com.example.desafioSpring.dtos.PostResponse;
-import com.example.desafioSpring.dtos.RecentPostsResponse;
+import com.example.desafioSpring.dtos.*;
 import com.example.desafioSpring.models.Post;
 import com.example.desafioSpring.models.User;
 import com.example.desafioSpring.repositories.PostRepository;
@@ -45,14 +42,21 @@ public class PostService {
         return new ResponseEntity(postResponse,HttpStatus.OK);
     }
 
-    public ResponseEntity getMostRecentPosts(int userId){
+    public ResponseEntity listPosts(int userId,String order){
         User user = userRepository.findById(userId).orElse(null);
         List<Post> postsList = new ArrayList<>();
 
         for(User elem : user.getFollowingList()){
             postsList.addAll(elem.getPost());
         }
-        postsList.sort(Comparator.comparing(Post::getDate));
+        if(order == null)
+            return new ResponseEntity(new RecentPostsResponse(userId,postsList),HttpStatus.OK);
+        if(order.equals("date_asc"))
+            postsList.sort(Comparator.comparing(Post::getDate));
+        else if (order.equals("date_desc"))
+            postsList.sort(Comparator.comparing(Post::getDate).reversed());
+        else
+            return new ResponseEntity(new ErrorHandlingDTO("Invalid Param"),HttpStatus.BAD_REQUEST);
 
         RecentPostsResponse recentPostsResponse = new RecentPostsResponse(userId,postsList);
         return new ResponseEntity(recentPostsResponse,HttpStatus.OK);

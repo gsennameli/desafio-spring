@@ -34,4 +34,9 @@ public class PostController {
     public ResponseEntity getCountPromoPosts(@PathVariable int userId){
         return postService.getQuantityOfPromoPosts(userId);
     }
+    @GetMapping("/{userId}/list")
+    public ResponseEntity getAllPostsOfSeller(@PathVariable int userId, @RequestParam(name = "order", required = false) String order){
+        return postService.getPromoPostsOfSeller(userId,order);
+    }
+
 }

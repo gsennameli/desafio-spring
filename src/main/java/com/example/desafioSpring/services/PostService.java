@@ -110,4 +110,27 @@ public class PostService {
 
         return new ResponseEntity(new QuantityPromoPostsResponse(user,countPromoPosts),HttpStatus.OK);
     }
+
+    public ResponseEntity getPromoPostsOfSeller(int userId,String order){
+        User user = userRepository.findById(userId).orElse(null);
+        List<Post> promoPostList = user.getPost()
+                                        .stream()
+                                        .filter(post -> post.isHasPromo())
+                                        .collect(Collectors.toList());
+        if(user == null)
+            return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.NOT_FOUND);
+        else if (user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("Not seller users do not have posts"),HttpStatus.BAD_REQUEST);
+        if(order == null)
+            return new ResponseEntity(new RecentPostsResponse(userId,promoPostList),HttpStatus.OK);
+        if(order.equals("date_asc"))
+            promoPostList.sort(Comparator.comparing(Post::getDate));
+        else if (order.equals("date_desc"))
+            promoPostList.sort(Comparator.comparing(Post::getDate).reversed());
+        else
+            return new ResponseEntity(new ErrorHandlingDTO("Invalid Param"),HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity(new RecentPostsResponse(userId,promoPostList),HttpStatus.OK);
+
+    }
 }

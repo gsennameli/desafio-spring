@@ -84,6 +84,7 @@ public class UserService {
         FollowingDTO followingDTO = new FollowingDTO(user);
         if(order == null)
             return new ResponseEntity(followingDTO,HttpStatus.OK);
+
         if(order.equals("name_asc"))
             followingDTO.getFollowing().sort(Comparator.comparing(UserDTO::getUserName));
         else if (order.equals("name_desc"))

@@ -1,6 +1,7 @@
 package com.example.desafioSpring.controllers;
 
 import com.example.desafioSpring.dtos.PostRequest;
+import com.example.desafioSpring.dtos.PromoPostRequest;
 import com.example.desafioSpring.models.Post;
 import com.example.desafioSpring.services.PostService;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,16 @@ public class PostController {
     }
 
     @PostMapping("/newpost")
-    public ResponseEntity newPost(@RequestBody PostRequest post){
+    public ResponseEntity createPost(@RequestBody PostRequest post){
         return postService.createPost(post);
     }
 
     @GetMapping("/followed/{userId}/list")
     public ResponseEntity listPosts(@PathVariable int userId,@RequestParam(name = "order", required = false) String order){
         return postService.listPosts(userId,order);
+    }
+    @PostMapping("/newpromopost")
+    public ResponseEntity createPromoPost(@RequestBody PromoPostRequest promoPostRequest){
+        return postService.createPromoPost(promoPostRequest);
     }
 }

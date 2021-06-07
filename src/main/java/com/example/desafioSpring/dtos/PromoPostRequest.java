@@ -1,59 +1,29 @@
-package com.example.desafioSpring.models;
+package com.example.desafioSpring.dtos;
 
+import com.example.desafioSpring.models.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-public class Post {
-    @Id
+public class PromoPostRequest {
+    private int user_id;
     private int id;
 
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
     private int category;
     private double price;
-    private boolean hasPromo = false;
-
-    @Nullable
+    private boolean hasPromo;
     private double discount;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product detail;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
-
-    public Post() {
+    public int getUser_id() {
+        return user_id;
     }
 
-    public Post(int id, Date date, int category, double price,Product detail, User user) {
-        this.id = id;
-        this.date = date;
-        this.category = category;
-        this.price = price;
-        this.detail = detail;
-        this.user = user;
-    }
-
-    public Product getDetail() {
-        return detail;
-    }
-
-    public void setDetail(Product detail) {
-        this.detail = detail;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public int getId() {
@@ -86,6 +56,14 @@ public class Post {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Product getDetail() {
+        return detail;
+    }
+
+    public void setDetail(Product detail) {
+        this.detail = detail;
     }
 
     public boolean isHasPromo() {

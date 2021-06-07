@@ -20,6 +20,8 @@ public class RecentPostDTO {
     private String brand;
     private String color;
     private String notes;
+    private boolean hasPromo;
+    private double discount;
 
     public RecentPostDTO(Post post,Product product) {
         this.id = post.getId();
@@ -32,6 +34,8 @@ public class RecentPostDTO {
         this.brand = product.getBrand();
         this.color = product.getColor();
         this.notes = product.getNotes();
+        this.hasPromo = post.isHasPromo();
+        this.discount = post.getDiscount();
     }
 
     public int getId() {
@@ -112,5 +116,21 @@ public class RecentPostDTO {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public boolean isHasPromo() {
+        return hasPromo;
+    }
+
+    public void setHasPromo(boolean hasPromo) {
+        this.hasPromo = hasPromo;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

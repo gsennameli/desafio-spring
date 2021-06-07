@@ -27,7 +27,7 @@ public class PostService {
     }
 
     public ResponseEntity createPost(PostRequest postRequest){
-        //TODO Post nao esta atrelando a um usuario
+
         if(productRepository.findById(postRequest.getDetail().getId()).isPresent())
             return new ResponseEntity(new ErrorHandlingDTO("This product Id already exists"),HttpStatus.BAD_REQUEST);
 
@@ -62,5 +62,26 @@ public class PostService {
 
         RecentPostsResponse recentPostsResponse = new RecentPostsResponse(userId,postsList);
         return new ResponseEntity(recentPostsResponse,HttpStatus.OK);
+    }
+
+    public ResponseEntity createPromoPost(PromoPostRequest promoPostRequest){
+        if(productRepository.findById(promoPostRequest.getDetail().getId()).isPresent())
+            return new ResponseEntity(new ErrorHandlingDTO("This product Id already exists"),HttpStatus.BAD_REQUEST);
+
+        User user = userRepository.findById(promoPostRequest.getUser_id()).orElse(null);
+        if(user == null)
+            return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.NOT_FOUND);
+        else if (user.isSeller() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("You can not assign a post to a not seller user"),HttpStatus.BAD_REQUEST);
+        else if (promoPostRequest.isHasPromo() == false)
+            return new ResponseEntity(new ErrorHandlingDTO("This product do not have promo"),HttpStatus.BAD_REQUEST);
+
+        Post post = new Post(promoPostRequest.getId(),promoPostRequest.getDate(),promoPostRequest.getCategory(),promoPostRequest.getPrice(),promoPostRequest.getDetail(),user);
+        post.setHasPromo(promoPostRequest.isHasPromo());
+        post.setDiscount(promoPostRequest.getDiscount());
+        postRepository.save(post);
+
+        PostResponse postResponse = new PostResponse(post);
+        return new ResponseEntity(postResponse,HttpStatus.OK);
     }
 }

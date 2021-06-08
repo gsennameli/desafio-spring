@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Entity
 public class User{
-//TODO O usuário que nao eh vendedor nao pode ser seguido, assim ele n tem followers
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;

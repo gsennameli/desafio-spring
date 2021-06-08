@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-    //TODO Qty Followers nao esta chechando se o usuario existe
     private final UserRepository userRepository;
 
     UserService(UserRepository userRepository){
@@ -22,17 +21,21 @@ public class UserService {
 
     public ResponseEntity followUser(int userId, int userIdToFollow){
         User userToFollow = userRepository.findById(userIdToFollow).orElse(null);
-        if(userToFollow == null || userId == userIdToFollow)
+        User user = userRepository.findById(userId).orElse(null);
+
+        if(userToFollow == null || userId == userIdToFollow || user == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         if(userToFollow.isSeller() == false)
             return new ResponseEntity(new ErrorHandlingDTO("You can only follow sellers"),HttpStatus.BAD_REQUEST);
-        return userRepository.findById(userId)
-                .map(user -> {
-                    user.followUser(userToFollow);
-                    userRepository.save(user);
-                    userRepository.save(userToFollow);
-                    return new ResponseEntity(HttpStatus.OK);
-                }).orElse(new ResponseEntity(HttpStatus.BAD_REQUEST));
+        for(User elem : userRepository.findById(userId).get().getFollowingList()){
+            if (elem.getId() == userIdToFollow)
+                return new ResponseEntity(new ErrorHandlingDTO("You already follow this user"),HttpStatus.BAD_REQUEST);
+        }
+
+        user.followUser(userToFollow);
+        userRepository.save(user);
+        userRepository.save(userToFollow);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
@@ -57,6 +60,8 @@ public class UserService {
 
     public ResponseEntity qtyFollowers(int userId){
         User user = userRepository.findById(userId).orElse(null);
+        if(user == null)
+            return new ResponseEntity(new ErrorHandlingDTO("User id not found"),HttpStatus.BAD_REQUEST);
         if(user.isSeller() == false)
             return new ResponseEntity(new ErrorHandlingDTO("Common users do not have followers"),HttpStatus.BAD_REQUEST);
 
@@ -104,13 +109,26 @@ public class UserService {
     public ResponseEntity unfollowUser(int userId,int userToUnfollowId){
         User user = userRepository.findById(userId).orElse(null);
         User userToUnfollow = userRepository.findById(userToUnfollowId).orElse(null);
+        boolean foundUserToUnfollowInFollowingList = false;
+
         if(userToUnfollow == null || userId == userToUnfollowId)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        for(User elem : user.getFollowingList()){
+            if(elem.getId() == userToUnfollowId){
+                foundUserToUnfollowInFollowingList = true;
+                break;
+            }
+        }
+        if(foundUserToUnfollowInFollowingList){
+            user.unfollowUser(userToUnfollow);
+            userRepository.save(user);
+            userRepository.save(userToUnfollow);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(new ErrorHandlingDTO("You no longer follow this user"),HttpStatus.BAD_REQUEST);
+        }
 
-        user.unfollowUser(userToUnfollow);
-        userRepository.save(user);
-        userRepository.save(userToUnfollow);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
 
